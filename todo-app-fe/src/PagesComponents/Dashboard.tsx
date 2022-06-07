@@ -1,11 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import getConfig from 'next/config'
-
-const { publicRuntimeConfig } = getConfig()
 
 export default function DashboardPageComponent() {
-  return <S.Container>Hello! - API at {publicRuntimeConfig.API_URL}</S.Container>
+  return <S.Container>Dashboard</S.Container>
 }
 
 export const S = {
@@ -13,6 +10,7 @@ export const S = {
     display: flex;
     width: 100%;
     height: 100%;
-    color: red;
+    background-color: #16181f;
+    color: #fff;
   `,
 }
