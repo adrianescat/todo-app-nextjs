@@ -1,6 +1,7 @@
 import React from 'react'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import { RecoilRoot } from 'recoil'
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -19,11 +20,12 @@ function App({ Component, pageProps }: AppProps) {
         <link rel='manifest' href='/manifest.json' />
         <title>Lens</title>
       </Head>
-      <div className='app-wrapper'>
+      <RecoilRoot>
+        {/* <RecoilizeDebugger root={root} /> */}
         <Component {...pageProps} />
         <div id='root-portal' />
         <div id='root-portal-modal' />
-      </div>
+      </RecoilRoot>
     </>
   )
 }

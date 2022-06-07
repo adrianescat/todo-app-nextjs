@@ -2,6 +2,8 @@ import React, { useState, ChangeEvent } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useSetRecoilState } from 'recoil'
+import { userState } from '../store/atoms'
 import AuthService from '../services/Auth.service'
 import LoginService from '../services/Login.service'
 
@@ -11,12 +13,12 @@ export default function LoginPageComponent() {
   const [loginError, setLoginEror] = useState(false)
   const router = useRouter()
 
+  const setUser = useSetRecoilState(userState)
+
   const handleSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoginEror(false)
     const login = await LoginService.signIn(emailInput, passwordInput)
-
-    console.log(login)
 
     if (login?.message) {
       setLoginEror(true)
@@ -24,6 +26,7 @@ export default function LoginPageComponent() {
 
     if (login?.email && login?.authentication_token) {
       AuthService.setToken(login.authentication_token)
+      setUser({ email: login.email, token: login.authentication_token })
       router.push('/')
     }
   }

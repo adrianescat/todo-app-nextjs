@@ -1,8 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useRecoilState } from 'recoil'
+import { useRouter } from 'next/router'
+import { userState } from '../store/atoms'
+import AuthService from '../services/Auth.service'
 
 export default function DashboardPageComponent() {
-  return <S.Container>Dashboard</S.Container>
+  const [user, setUser] = useRecoilState(userState)
+  const router = useRouter()
+
+  const handleLogout = () => {
+    AuthService.clearToken()
+    setUser(undefined)
+    router.push('/')
+  }
+
+  return (
+    <S.Container>
+      Dashboard {user?.email} - {user?.token}
+      <button type='button' onClick={handleLogout}>
+        logout
+      </button>
+    </S.Container>
+  )
 }
 
 export const S = {
