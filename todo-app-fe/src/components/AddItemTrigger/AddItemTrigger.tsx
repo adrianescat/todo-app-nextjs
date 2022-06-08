@@ -47,7 +47,7 @@ export default function AddItemTrigger() {
           </li>
           <li>
             <button type='button' onClick={handleOpenTodoModal}>
-              Add todo
+              Add task
             </button>
           </li>
         </ul>

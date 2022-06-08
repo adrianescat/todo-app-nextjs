@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { PlusOutlined } from '@ant-design/icons'
+import Link from 'next/link'
 import { userState, listsState } from '../store/atoms'
 import TodoService from '../services/Todo.service'
 import Header from '../components/Header'
@@ -44,11 +45,13 @@ export default function CollectionsPageComponent() {
             <S.CollectionsList>
               {lists.map(list => {
                 return (
-                  <S.CollectionBox key={`list-${list.id}`}>
-                    <S.CollectionIcon style={{ backgroundColor: list.color }} />
-                    <h4>{list.title}</h4>
-                    <div>tasks</div>
-                  </S.CollectionBox>
+                  <Link key={`list-${list.id}`} href={{ pathname: `/collection/${list.id}` }}>
+                    <S.CollectionBox>
+                      <S.CollectionIcon style={{ backgroundColor: list.color ? list.color : '#fff' }} />
+                      <h4>{list.title}</h4>
+                      <div>tasks</div>
+                    </S.CollectionBox>
+                  </Link>
                 )
               })}
               <S.AddCollectionBox onClick={handleOpenCollectionModal}>

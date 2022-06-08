@@ -95,6 +95,7 @@ export const S = {
     justify-content: center;
     top: 30%;
     width: 100%;
+    z-index: 9999;
   `,
   ModalBody: styled.div`
     background: #16181f;
