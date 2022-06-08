@@ -18,7 +18,7 @@ function App({ Component, pageProps }: AppProps) {
         <link rel='stylesheet' href='/assets/css/global.css' />
 
         <link rel='manifest' href='/manifest.json' />
-        <title>Lens</title>
+        <title>Todo App</title>
       </Head>
       <RecoilRoot>
         {/* <RecoilizeDebugger root={root} /> */}

@@ -16,8 +16,6 @@ export default function LoginPageComponent() {
     setRegisterError('')
     const login = await LoginService.signUp(emailInput, passwordInput)
 
-    console.log(login)
-
     if (login?.message) {
       setRegisterError('There was an error registering the user. Try again later')
     }
@@ -47,8 +45,8 @@ export default function LoginPageComponent() {
   return (
     <S.Container>
       <S.RegisterForm onSubmit={handleSubmitRegister}>
-        <input name='email' type='email' placeholder='Email' value={emailInput} onChange={handleEmailChange} />
-        <input name='password' type='password' placeholder='password' value={passwordInput} onChange={handlePasswordChange} />
+        <input name='email' type='email' placeholder='Email' value={emailInput} onChange={handleEmailChange} required />
+        <input name='password' type='password' placeholder='password' value={passwordInput} onChange={handlePasswordChange} required />
         <button type='submit'>Sign Up</button>
       </S.RegisterForm>
       <S.LoginWrapper>

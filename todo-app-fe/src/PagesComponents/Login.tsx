@@ -46,8 +46,8 @@ export default function LoginPageComponent() {
   return (
     <S.Container>
       <S.LoginForm onSubmit={handleSubmitLogin}>
-        <input name='email' type='email' placeholder='Email' value={emailInput} onChange={handleEmailChange} />
-        <input name='password' type='password' placeholder='password' value={passwordInput} onChange={handlePasswordChange} />
+        <input name='email' type='email' placeholder='Email' value={emailInput} onChange={handleEmailChange} required />
+        <input name='password' type='password' placeholder='password' value={passwordInput} onChange={handlePasswordChange} required />
         <button type='submit'>Sign In</button>
       </S.LoginForm>
       <S.RegisterWrapper>
