@@ -16,6 +16,7 @@ export default function ModalAddTodo({ isOpen, onClose, collectionId }: Props) {
   const [dueDateInput, setDueDateInput] = useState('')
   const [noteInput, setNoteInput] = useState('')
   const [collectionIdInput, setCollectionIdInput] = useState<number | undefined>()
+  const [errorMessage, setErrorMessage] = useState('')
 
   const user = useRecoilValue(userState)
   const lists = useRecoilValue(listsState)
@@ -35,6 +36,8 @@ export default function ModalAddTodo({ isOpen, onClose, collectionId }: Props) {
         const response = await TodoService.getAllLists(user.email)
         setLists(response)
         onClose && onClose()
+      } else {
+        setErrorMessage('There was an error creating the task.')
       }
     }
   }
@@ -85,6 +88,7 @@ export default function ModalAddTodo({ isOpen, onClose, collectionId }: Props) {
           </form>
         )}
         {!lists.length && !collectionId && <div>No collections yet</div>}
+        {errorMessage && <S.responseErrorMessage>{errorMessage}</S.responseErrorMessage>}
       </S.Container>
     </Modal>
   )
@@ -133,5 +137,22 @@ export const S = {
       cursor: pointer;
       background-image: linear-gradient(to bottom right, #c94dce, #f79186);
     }
+  `,
+  responseErrorMessage: styled.div`
+    display: flex;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    height: 50px;
+    width: 400px;
+    margin-top: 40px;
+    border-radius: 5px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #ff4747;
+    width: 100%;
   `,
 }

@@ -48,12 +48,17 @@ export default function CollectionsPageComponent({ urlName }: Props) {
           <ClientComponentWrapper>
             <S.CollectionsList>
               {lists.map(list => {
+                const tasksToDo = list.tasks.filter(task => !task.done)
+                const tasksCompleted = list.tasks.filter(task => task.done)
+
                 return (
                   <Link key={`list-${list.id}`} href={{ pathname: `/collection/${list.id}` }}>
                     <S.CollectionBox>
                       <S.CollectionIcon style={{ backgroundColor: list.color ? list.color : '#fff' }} />
                       <h4>{list.title}</h4>
-                      <div>tasks</div>
+                      <S.TasksStatus>
+                        <span>{`${tasksToDo.length} / ${tasksCompleted.length}`}</span>
+                      </S.TasksStatus>
                     </S.CollectionBox>
                   </Link>
                 )
@@ -147,5 +152,12 @@ export const S = {
     width: 50px;
     height: 50px;
     border-radius: 30%;
+  `,
+  TasksStatus: styled.div`
+    display: flex;
+    width: 100%;
+    color: #fff;
+    margin-top: 40px;
+    font-size: 18px;
   `,
 }

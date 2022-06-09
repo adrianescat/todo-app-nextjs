@@ -13,6 +13,7 @@ interface Props {
 export default function ModalAddCollection({ isOpen, onClose }: Props) {
   const [titleInput, setTitleInput] = useState('')
   const [colorInput, setColorInput] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const user = useRecoilValue(userState)
   const setLists = useSetRecoilState(listsState)
@@ -27,12 +28,15 @@ export default function ModalAddCollection({ isOpen, onClose }: Props) {
         const response = await TodoService.getAllLists(user.email)
         setLists(response)
         onClose && onClose()
+      } else {
+        setErrorMessage('There was an error or the collection name was taken.')
       }
     }
   }
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
+      setErrorMessage('')
       setTitleInput(e.target.value)
     }
   }
@@ -52,6 +56,7 @@ export default function ModalAddCollection({ isOpen, onClose }: Props) {
           <input type='text' placeholder='Hex color' name='color' value={colorInput} onChange={handleColorChange} required />
           <button type='submit'> Add</button>
         </form>
+        {errorMessage && <S.responseErrorMessage>{errorMessage}</S.responseErrorMessage>}
       </S.Container>
     </Modal>
   )
@@ -99,5 +104,22 @@ export const S = {
       cursor: pointer;
       background-image: linear-gradient(to bottom right, #c94dce, #f79186);
     }
+  `,
+  responseErrorMessage: styled.div`
+    display: flex;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    height: 50px;
+    width: 400px;
+    margin-top: 40px;
+    border-radius: 5px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #ff4747;
+    width: 100%;
   `,
 }

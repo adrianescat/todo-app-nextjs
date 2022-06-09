@@ -10,9 +10,10 @@ import ModalEditTodo from '../Modals/ModalEditTodo'
 interface Props {
   collection: List
   task: Task
+  styles?: React.CSSProperties
 }
 
-export default function TaskBox({ collection, task }: Props) {
+export default function TaskBox({ collection, task, styles }: Props) {
   const user = useRecoilValue(userState)
   const setLists = useSetRecoilState(listsState)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -48,7 +49,7 @@ export default function TaskBox({ collection, task }: Props) {
   }
 
   return (
-    <S.TaskBox>
+    <S.TaskBox style={styles}>
       <S.TaskCheckBoxWrapper
         onClick={handleCheckTask}
         className={task.done ? 'done' : ''}
