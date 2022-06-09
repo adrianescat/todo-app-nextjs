@@ -50,34 +50,36 @@ const Modal: React.FC<ModalProps> = ({
         <S.Modal className={className}>
           <S.Overlay onClick={closable ? onClose : () => undefined} />
           <S.ModalBody>
-            {closable && (
-              <S.CloseButton onClick={onClose}>
-                <CloseOutlined style={{ fontSize: '16px' }} />
-              </S.CloseButton>
-            )}
-            {!header && title && <S.Header>{title}</S.Header>}
-            {header && !title && { header }}
+            <>
+              {closable && (
+                <S.CloseButton onClick={onClose}>
+                  <CloseOutlined style={{ fontSize: '16px' }} />
+                </S.CloseButton>
+              )}
+              {!header && title && <S.Header>{title}</S.Header>}
+              {header && !title && { header }}
 
-            <S.Content>{children}</S.Content>
+              <S.Content>{children}</S.Content>
 
-            {!footer && hasFooter && !hasConfirmOnly && (
-              <S.Footer>
-                <button type='button' onClick={onReject}>
-                  {cancelButtonLabel}
-                </button>
-                <button type='button' onClick={onConfirm}>
-                  {confirmButtonLabel}
-                </button>
-              </S.Footer>
-            )}
-            {!footer && hasFooter && hasConfirmOnly && (
-              <S.Footer>
-                <button type='button' onClick={onConfirm}>
-                  {confirmButtonLabel}
-                </button>
-              </S.Footer>
-            )}
-            {footer && hasFooter && <S.Footer>{footer}</S.Footer>}
+              {!footer && hasFooter && !hasConfirmOnly && (
+                <S.Footer>
+                  <button type='button' onClick={onReject}>
+                    {cancelButtonLabel}
+                  </button>
+                  <button type='button' onClick={onConfirm}>
+                    {confirmButtonLabel}
+                  </button>
+                </S.Footer>
+              )}
+              {!footer && hasFooter && hasConfirmOnly && (
+                <S.Footer>
+                  <button type='button' onClick={onConfirm}>
+                    {confirmButtonLabel}
+                  </button>
+                </S.Footer>
+              )}
+              {footer && hasFooter && <S.Footer>{footer}</S.Footer>}
+            </>
           </S.ModalBody>
         </S.Modal>
       </Portal>
