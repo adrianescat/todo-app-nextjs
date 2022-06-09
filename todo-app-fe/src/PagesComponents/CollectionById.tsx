@@ -73,7 +73,7 @@ export default function CollectionById({ collectionId }: Props) {
 
   return (
     <S.Container>
-      <Header />
+      <Header urlName='' />
       <PageContentWrapper>
         <ClientComponentWrapper>
           <S.CollectionPageContainer>

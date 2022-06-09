@@ -1,41 +1,32 @@
 import React, { ChangeEvent, useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 import { userState, listsState } from '../../store/atoms'
-import TodoService from '../../services/Todo.service'
+import { Task } from '../../types'
 import Modal from './Modal'
 
 interface Props {
   isOpen: boolean
-  collectionId?: number
+  task: Task
+  collectionId: number
   onClose: () => void
 }
 
-export default function ModalAddTodo({ isOpen, onClose, collectionId }: Props) {
-  const [titleInput, setTitleInput] = useState('')
-  const [dueDateInput, setDueDateInput] = useState('')
-  const [noteInput, setNoteInput] = useState('')
-  const [collectionIdInput, setCollectionIdInput] = useState<number | undefined>()
+export default function ModalEditTodo({ isOpen, onClose, task, collectionId }: Props) {
+  const [titleInput, setTitleInput] = useState(task?.title || '')
+  const [dueDateInput, setDueDateInput] = useState(task?.due_date || '')
+  const [noteInput, setNoteInput] = useState(task?.note || '')
+  const [collectionIdInput, setCollectionIdInput] = useState<number>(collectionId)
 
   const user = useRecoilValue(userState)
   const lists = useRecoilValue(listsState)
-  const setLists = useSetRecoilState(listsState)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (user?.email && titleInput) {
-      const taskCreateResponse = await TodoService.createTask(user.email, collectionId || collectionIdInput || 1, {
-        title: titleInput,
-        dueDate: dueDateInput,
-        note: noteInput,
-      })
-
-      if (taskCreateResponse?.title && taskCreateResponse?.id) {
-        const response = await TodoService.getAllLists(user.email)
-        setLists(response)
-        onClose && onClose()
-      }
+      alert("Backend's missing feature")
+      onClose && onClose()
     }
   }
 
@@ -66,14 +57,14 @@ export default function ModalAddTodo({ isOpen, onClose, collectionId }: Props) {
   return (
     <Modal hasFooter={false} visible={isOpen} closable onClose={onClose}>
       <S.Container>
-        <h3>Add task</h3>
-        {(lists.length > 0 || collectionId) && (
+        <h3>Update task</h3>
+        {lists.length > 0 && (
           <form onSubmit={handleSubmit}>
             <input type='text' placeholder='Title' name='title' value={titleInput} onChange={handleTitleChange} required />
             <input type='date' placeholder='Due date' name='due_date' value={dueDateInput} onChange={handleDueDateChange} />
             <input type='text' placeholder='Note' name='color' value={noteInput} onChange={handleNoteChange} />
-            {!collectionId && lists.length > 0 && (
-              <select name='collection' onChange={handleCollectionChange} required>
+            {lists.length > 0 && (
+              <select value={collectionIdInput} name='collection' onChange={handleCollectionChange} required>
                 {lists.map(list => (
                   <option key={list.id} value={list.id}>
                     {list.title}
@@ -81,10 +72,9 @@ export default function ModalAddTodo({ isOpen, onClose, collectionId }: Props) {
                 ))}
               </select>
             )}
-            <button type='submit'>Add</button>
+            <button type='submit'>Update</button>
           </form>
         )}
-        {!lists.length && !collectionId && <div>No collections yet</div>}
       </S.Container>
     </Modal>
   )

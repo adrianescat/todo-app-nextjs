@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { CheckOutlined } from '@ant-design/icons'
+import { CheckOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState, listsState } from '../../store/atoms'
 import { List, Task } from '../../types'
 import TodoService from '../../services/Todo.service'
+import ModalEditTodo from '../Modals/ModalEditTodo'
 
 interface Props {
   collection: List
@@ -14,6 +15,7 @@ interface Props {
 export default function TaskBox({ collection, task }: Props) {
   const user = useRecoilValue(userState)
   const setLists = useSetRecoilState(listsState)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
   const handleCheckTask = async () => {
     if (user?.email && task) {
@@ -26,9 +28,29 @@ export default function TaskBox({ collection, task }: Props) {
     }
   }
 
+  const handleDeleteTask = async () => {
+    if (user?.email && task) {
+      const deleteResponse = await TodoService.deleteTask(user.email, task.id)
+
+      if (deleteResponse?.ok) {
+        const response = await TodoService.getAllLists(user.email)
+        setLists(response)
+      }
+    }
+  }
+
+  const handleOpenEditModal = () => {
+    setIsEditModalOpen(true)
+  }
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false)
+  }
+
   return (
-    <S.TaskBox data-tooltip={task.note ? task.note : null} data-tooltip-location='top' onClick={handleCheckTask}>
+    <S.TaskBox>
       <S.TaskCheckBoxWrapper
+        onClick={handleCheckTask}
         className={task.done ? 'done' : ''}
         style={{
           border: `2px solid ${collection.color ? collection.color : '#fff'}`,
@@ -39,13 +61,22 @@ export default function TaskBox({ collection, task }: Props) {
           <CheckOutlined style={{ fontSize: '20px' }} />
         </span>
       </S.TaskCheckBoxWrapper>
-      {task.title}
+      <S.TaskTitle data-tooltip={task.note ? task.note : null} data-tooltip-location='top' onClick={handleOpenEditModal}>
+        {task.title}
+      </S.TaskTitle>
+      <S.DeleteTaskWrapper className='delete-button' onClick={handleDeleteTask}>
+        <span>
+          <DeleteOutlined style={{ fontSize: '18px' }} />
+        </span>
+      </S.DeleteTaskWrapper>
+      <ModalEditTodo isOpen={isEditModalOpen} onClose={handleCloseEditModal} task={task} collectionId={collection.id} />
     </S.TaskBox>
   )
 }
 export const S = {
   TaskBox: styled.div`
     display: flex;
+    position: relative;
     flex-direction: row;
     width: 100%;
     height: 60px;
@@ -54,7 +85,10 @@ export const S = {
     align-items: center;
     margin-top: 20px;
     padding: 15px;
-    cursor: pointer;
+
+    &:hover .delete-button span {
+      display: flex;
+    }
   `,
   TaskCheckBoxWrapper: styled.div`
     height: 50px;
@@ -66,6 +100,7 @@ export const S = {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     span {
       display: none;
@@ -76,6 +111,25 @@ export const S = {
       width: 100%
       height: 100%;
       display: block;
+    }
+  `,
+  TaskTitle: styled.div`
+    width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+  `,
+  DeleteTaskWrapper: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+
+    span {
+      display: none;
     }
   `,
 }

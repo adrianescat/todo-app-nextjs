@@ -6,7 +6,11 @@ import Header from '../components/Header'
 import PageContentWrapper from '../components/PageContentWrapper'
 import TodoService from '../services/Todo.service'
 
-export default function DashboardPageComponent() {
+interface Props {
+  urlName: string
+}
+
+export default function DashboardPageComponent({ urlName }: Props) {
   const user = useRecoilValue(userState)
   const lists = useRecoilValue(listsState)
   const setLists = useSetRecoilState(listsState)
@@ -24,7 +28,7 @@ export default function DashboardPageComponent() {
 
   return (
     <S.Container>
-      <Header />
+      <Header urlName={urlName} />
       <PageContentWrapper>
         <>
           <h3>Dashboard</h3>

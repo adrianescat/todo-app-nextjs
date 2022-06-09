@@ -10,7 +10,11 @@ import PageContentWrapper from '../components/PageContentWrapper'
 import ClientComponentWrapper from '../components/ClientComponentWrapper'
 import ModalAddCollection from '../components/Modals/ModalAddCollection'
 
-export default function CollectionsPageComponent() {
+interface Props {
+  urlName: string
+}
+
+export default function CollectionsPageComponent({ urlName }: Props) {
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false)
   const user = useRecoilValue(userState)
   const lists = useRecoilValue(listsState)
@@ -37,7 +41,7 @@ export default function CollectionsPageComponent() {
 
   return (
     <S.Container>
-      <Header />
+      <Header urlName={urlName} />
       <PageContentWrapper>
         <S.CollectionsPageContainer>
           <h3>Collections</h3>

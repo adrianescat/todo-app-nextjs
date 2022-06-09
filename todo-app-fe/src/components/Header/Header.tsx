@@ -9,7 +9,11 @@ import AuthService from '../../services/Auth.service'
 
 import AddItemTrigger from '../AddItemTrigger'
 
-export default function Header() {
+interface Props {
+  urlName: string
+}
+
+export default function Header({ urlName }: Props) {
   const [, setUser] = useRecoilState(userState)
   const router = useRouter()
 
@@ -19,6 +23,8 @@ export default function Header() {
     router.push('/')
   }
 
+  const urlNameFromClient = window && window.location.pathname
+
   return (
     <S.Header>
       <S.BurgerMenu>
@@ -26,7 +32,7 @@ export default function Header() {
       </S.BurgerMenu>
       <S.NavBar>
         <ul>
-          <li>
+          <li className={urlName === '/' || urlNameFromClient === '/' ? 'selected' : ''}>
             <Link href='/' passHref>
               <span>
                 <span>
@@ -36,7 +42,7 @@ export default function Header() {
               </span>
             </Link>
           </li>
-          <li>
+          <li className={urlName === '/collections' || urlNameFromClient === '/collections' ? 'selected' : ''}>
             <Link href='/collections' passHref>
               <span>
                 <span>
@@ -102,6 +108,10 @@ export const S = {
       cursor: pointer;
       margin: 0 20px;
       margin-right: 5px;
+    }
+
+    li.selected {
+      color: #fff;
     }
 
     li span {

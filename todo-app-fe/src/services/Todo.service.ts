@@ -10,6 +10,13 @@ export interface TaskInput {
   note?: string
 }
 
+export interface TaskInputEdit {
+  id: number
+  title: string
+  dueDate?: string
+  note?: string
+}
+
 class TodoService {
   public static getAllLists = (email: string): Promise<Array<List>> => {
     const token = AuthService.getToken() as string
@@ -75,6 +82,35 @@ class TodoService {
         'X-User-Token': token,
         'X-User-Email': email,
       },
+    }).then(res => res.json())
+  }
+
+  public static deleteTask = (email: string, taskId: number): Promise<any> => {
+    const token = AuthService.getToken() as string
+
+    return fetch(`${publicRuntimeConfig.API_URL}/api/tasks/${taskId}`, {
+      method: 'DELETE',
+      headers: {
+        'X-User-Token': token,
+        'X-User-Email': email,
+      },
+    })
+  }
+
+  public static updateTask = (email: string, collectionId: number, task: TaskInputEdit): Promise<Task> => {
+    const token = AuthService.getToken() as string
+    const formData = new FormData()
+    formData.append('title', task.title)
+    formData.append('due_date', task.dueDate ? task.dueDate : '9999-12-31')
+    formData.append('note', task.note ? task.note : '')
+
+    return fetch(`${publicRuntimeConfig.API_URL}/api/tasks/${task.id}`, {
+      method: 'UPDATE',
+      headers: {
+        'X-User-Token': token,
+        'X-User-Email': email,
+      },
+      body: formData,
     }).then(res => res.json())
   }
 }
